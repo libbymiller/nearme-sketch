@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteRule ^(.*)$ http://localhost:8124/$1 [P,L]
+

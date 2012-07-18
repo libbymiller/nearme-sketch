@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="jquery-1.4.4.min.js"></script>
+<script type="text/javascript">
+
+function go(){
+  navigator.geolocation.getCurrentPosition(
+   function(pos){
+    $("#lat").html(pos.coords.latitude);
+    $("#lon").html(pos.coords.longitude);
+
+     do_test(pos.coords.latitude,pos.coords.longitude);
+   }
+ );
+//else - no location - offer some sort of other input
+
+}
+
+function do_test(lat,lon){
+
+  var url = "http://dev.notu.be/2012/07/nearme/nodejs/?lat="+lat+"&lon="+lon;
+
+    $.ajax({
+        type: "GET",
+        url: url,
+        dataType: "json",
+        success: result
+    });    
+
+}
+
+
+function result(json){
+  console.log(json);
+
+  var html = [];
+
+  var foo = json["articles"];
+  for(var j in foo){
+     //console.log(foo[j]);
+     var d = foo[j]["full_data"]["updatedAt"];
+     var title = foo[j]["full_data"]["title"];
+     if(title){
+         html.push(title);   
+     }
+
+  }
+  $("#result").html(html.join("\n"))
+
+}
+
+</script>
+</head>
+<body onload="javascript:go();">
+
+<p id="lat"></p>
+<p id="lon"></p>
+<pre id="result"></pre>
+
+
+</body>
+</html>
